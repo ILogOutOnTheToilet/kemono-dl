@@ -2,10 +2,13 @@ import re
 import hashlib
 import os
 import time
+from .logger import logger
 
 def parse_url(url):
     # parse urls
-    downloadable = re.search(r'^https://(kemono\.party|coomer\.party)/([^/]+)/user/([^/]+)($|/post/([^/]+)$)',url)
+    logger.debug(f"Parsing the URL: {url}")
+    # ^https:\/\/(kemono\.su|coomer\.su)\/api\/v1\/([^\/]+)\/user\/([^\/]+)($|\/post\/([^\/]+)$)
+    downloadable = re.search(r'^https://(kemono\.su|coomer\.su)/api/v1/([^/]+)/user/([^/]+)($|/post/([^/]+)$)',url)
     if not downloadable:
         return None
     return downloadable.group(1)

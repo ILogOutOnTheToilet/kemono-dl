@@ -127,7 +127,7 @@ The time in seconds to wait between downloading attachments or inline items. (de
 Stop on first request failure.
 
 # Notes
--   Excepted link formats:
+-   Accepted link formats:
     -   `https://{site}.party/{service}/user/{user_id}`
     -   `https://{site}.party/{service}/user/{user_id}/post/{post_id}`
 -   By default files are saved as .part files until completed.
