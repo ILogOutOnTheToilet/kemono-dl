@@ -286,7 +286,7 @@ class downloader:
             response = self.session.get(url=post_url, allow_redirects=True, headers=self.headers, cookies=self.cookies, timeout=self.timeout)
             page_soup = BeautifulSoup(response.text, 'html.parser')
             comment_soup = page_soup.find("div", {"class": "post__comments"})
-            no_comments = re.search('([^ ]+ does not support comment scraping yet\.|No comments found for this post\.)',comment_soup.text)
+            no_comments = re.search(r'([^ ]+ does not support comment scraping yet\.|No comments found for this post\.)',comment_soup.text)
             if no_comments:
                 logger.debug(no_comments.group(1).strip())
                 return ''
@@ -378,6 +378,7 @@ class downloader:
         cleaned_title = re.sub(r"\n+", "\n", post['post_variables']['title'])
         logger.info(f"Downloading Post | {cleaned_title}")
         logger.info(f"Date added | {post['post_variables']['added']}")
+        logger.info(f"Date published | {post['post_variables']['published']}")
         logger.debug("Post URL: https://{site}/{service}/user/{user_id}/post/{id}".format(**post['post_variables']))
         all_attachments_skipped = True
         all_inline_skipped = True
