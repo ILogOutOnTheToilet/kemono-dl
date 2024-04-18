@@ -21,8 +21,8 @@ class downloader:
         self.input_urls = self.update_url(args['links']) + self.update_url(args['from_file'])
         # list of completed posts from current session
         self.comp_posts = []
-        # list of creators info
-        self.creators = []
+        # Creator JSON object retrieved from server
+        self.creator = None
 
         # requests variables
         self.headers = {'User-Agent': args['user_agent']}
@@ -110,17 +110,13 @@ class downloader:
             result.append(f"{found.group(1)}api/v1/{found.group(3)}{found.group(5)}")
         return result
 
-    def get_creators(self, domain:str):
+    def get_user(self, domain:str, service:str, user_id:str):
         # get site creators
-        creators_api = f"https://{domain}/api/v1/creators.txt"
-        logger.debug(f"Getting creator json from {creators_api}")
-        return self.session.get(url=creators_api, cookies=self.cookies, headers=self.headers, timeout=self.timeout).json()
-
-    def get_user(self, user_id:str, service:str):
-        for creator in self.creators:
-            if creator['id'] == user_id and creator['service'] == service:
-                return creator
-        return None
+        creator_api = f"https://{domain}/api/v1/{service}/user/{user_id}/profile"
+        if not self.creator:
+            logger.debug(f"Getting creator json from {creator_api}")
+            self.creator = self.session.get(url=creator_api, cookies=self.cookies, headers=self.headers, timeout=self.timeout).json()
+        return self.creator
 
     def get_favorites(self, domain:str, fav_type:str, services:list = None):
         fav_api = f'https://{domain}/api/v1/favorites?type={fav_type}'
@@ -152,7 +148,8 @@ class downloader:
         service = found.group(4)
         user_id = found.group(5)
         is_post = found.group(6)
-        user = self.get_user(user_id, service)
+        user = self.get_user(site, service, user_id)
+        logger.info(f"Downloading user {user}")
         if not user:
             logger.error(f"Unable to find user info in creators list | {service} | {user_id}")
             return
@@ -673,15 +670,6 @@ class downloader:
         if self.c_fav_posts or self.c_fav_users:
             if not 'coomer.su' in domains:
                 domains.append('coomer.su')
-
-        for domain in domains:
-            try:
-                self.creators += self.get_creators(domain)
-            except:
-                logger.exception(f"Unable to get list of creators from {domain}")
-        if not self.creators:
-            logger.error("No creator information was retrieved. | exiting")
-            exit()
 
         if self.k_fav_posts:
             try:
