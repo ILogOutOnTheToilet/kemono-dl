@@ -305,11 +305,13 @@ class downloader:
         if type(time) is str:
             # ISO Formats: [r'%Y-%m-%dT%H:%M:%S.%f', r'%Y-%m-%dT%H:%M:%S']
             parsed_datetime = datetime.datetime.fromisoformat(time).strftime(self.date_strf_pattern)
-        elif isinstance(time, int) or isinstance(time, float) :
+        elif isinstance(time, int) or isinstance(time, float):
             parsed_datetime = datetime.datetime.fromtimestamp(time).strftime(self.date_strf_pattern) 
         return parsed_datetime
 
     def clean_post(self, post:dict, user:dict, domain:str):
+        if 'post' in post:
+            post = post['post']
         #logger.debug(f"Cleaning post | {post}")
         new_post = {}
         # set post variables
@@ -349,8 +351,10 @@ class downloader:
                 new_post['attachments'].append(file)
 
         new_post['inline_images'] = []
-        # TODO:  Randomly get the following error:
+        # You will get a warning if a string contains "/" that makes BeautifulSoup think it is a path.
+        # The warning will look like this:
         # MarkupResemblesLocatorWarning: The input looks more like a filename than markup. You may want to open this file and pass the filehandle into Beautiful Soup.
+        # This can be ignored.
         content_soup = BeautifulSoup(post['content'], 'html.parser')
         
         if self.inline:
