@@ -7,8 +7,8 @@ from .logger import logger
 def parse_url(url):
     # parse urls
     logger.debug(f"Parsing the URL: {url}")
-    # ^https:\/\/(kemono\.su|coomer\.su)\/api\/v1\/([^\/]+)\/user\/([^\/]+)($|\/post\/([^\/]+)$)
-    downloadable = re.search(r'^https://(kemono\.su|coomer\.su)/api/v1/([^/]+)/user/([^/]+)($|/post/([^/]+)$)',url)
+    # ^https:\/\/(kemono\.cr|coomer\.st)\/api\/v1\/([^\/]+)\/user\/([^\/]+)($|\/post\/([^\/]+)$)
+    downloadable = re.search(r'^https://(kemono\.cr|coomer\.st)/api/v1/([^/]+)/user/([^/]+)($|/post/([^/]+)$)',url)
     if not downloadable:
         return None
     return downloadable.group(1)

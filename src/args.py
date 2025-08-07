@@ -26,19 +26,19 @@ def get_args():
 
     ap.add_argument("--kemono-fav-users",
                     metavar="SERVICE", type=str, default=None,
-                    help="Downloads favorite users from kemono.party of specified type or types separated by a comma. Types include: all, patreon, fanbox, gumroad, subscribestar, dlsite, fantia. Your cookie file must have been gotten while logged in to work.")
+                    help="Downloads favorite users from kemono.cr of specified type or types separated by a comma. Types include: all, patreon, fanbox, gumroad, subscribestar, dlsite, fantia. Your cookie file must have been gotten while logged in to work.")
 
     ap.add_argument("--coomer-fav-users",
                     metavar="SERVICE", type=str, default=None,
-                    help="Downloads favorite users from coomer.party of specified type or types separated by a comma. Types include: all, onlyfans. Your cookie file must have been gotten while logged in to work.")
+                    help="Downloads favorite users from coomer.st of specified type or types separated by a comma. Types include: all, onlyfans. Your cookie file must have been gotten while logged in to work.")
 
     ap.add_argument("--kemono-fav-posts",
                     action='store_true', default=False,
-                    help="Downloads favorite posts from kemono.party. Your cookie file must have been gotten while logged in to work.")
+                    help="Downloads favorite posts from kemono.cr. Your cookie file must have been gotten while logged in to work.")
 
     ap.add_argument("--coomer-fav-posts",
                     action='store_true', default=False,
-                    help="Downloads favorite posts from coomer.party. Your cookie file must have been gotten while logged in to work.")
+                    help="Downloads favorite posts from coomer.st. Your cookie file must have been gotten while logged in to work.")
 
 
 

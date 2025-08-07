@@ -99,13 +99,13 @@ class downloader:
     def update_url(self, urls):
         result = []
         for url in urls:
-            # (https:\/\/(kemono\.su|coomer\.su)\/)([^\/]+\/user\/([^\/]+))($|\/post\/([^\/]+)$)
+            # (https:\/\/(kemono\.cr|coomer\.st)\/)([^\/]+\/user\/([^\/]+))($|\/post\/([^\/]+)$)
             # This replaces website URL with API URL.
-            found = re.search(r'(https://(kemono\.su|coomer\.su)/)([^/]+/user/([^/]+))($|/post/([^/]+)$)', url)
+            found = re.search(r'(https://(kemono\.cr|coomer\.st)/)([^/]+/user/([^/]+))($|/post/([^/]+)$)', url)
             if not found:
                 err = f"Unrecognizable URL: {url}"
                 logger.error(err)
-                logger.error(f"Please enter the URL as it would appear on the browser. E.g., https://kemono.su/patreon/user/123")
+                logger.error(f"Please enter the URL as it would appear on the browser. E.g., https://kemono.cr/patreon/user/123")
                 raise ValueError(err)
             result.append(f"{found.group(1)}api/v1/{found.group(3)}{found.group(5)}")
         return result
@@ -138,8 +138,8 @@ class downloader:
                 self.get_post(f"https://{domain}/api/v1/{favorite['service']}/user/{favorite['id']}")
 
     def get_post(self, url:str):
-        # (https:\/\/(kemono\.su|coomer\.su)\/)(api\/v1\/([^\/]+)\/user\/([^\/]+)($|\/post\/[^\/]+))
-        found = re.search(r'(https://(kemono\.su|coomer\.su)/)(api/v1/([^/]+)/user/([^/]+)($|/post/[^/]+))', url)
+        # (https:\/\/(kemono\.cr|coomer\.st)\/)(api\/v1\/([^\/]+)\/user\/([^\/]+)($|\/post\/[^\/]+))
+        found = re.search(r'(https://(kemono\.cr|coomer\.st)/)(api/v1/([^/]+)/user/([^/]+)($|/post/[^/]+))', url)
         if not found:
             logger.error(f"Unable to find url parameters for {url}")
             return
@@ -245,7 +245,6 @@ class downloader:
         self.write_to_file(file_path, dms_soup.prettify())
 
     def get_inline_images(self, post, content_soup):
-        # only get images that are hosted by the .su site
         inline_images = [inline_image for inline_image in content_soup.find_all("img") if inline_image['src'][0] == '/']
         for index, inline_image in enumerate(inline_images):
             file = {}
@@ -669,32 +668,32 @@ class downloader:
             if not domain in domains: domains.append(domain)
 
         if self.k_fav_posts or self.k_fav_users:
-            if not 'kemono.su' in domains:
-                domains.append('kemono.su')
+            if not 'kemono.cr' in domains:
+                domains.append('kemono.cr')
         if self.c_fav_posts or self.c_fav_users:
-            if not 'coomer.su' in domains:
-                domains.append('coomer.su')
+            if not 'coomer.st' in domains:
+                domains.append('coomer.st')
 
         if self.k_fav_posts:
             try:
-                self.get_favorites('kemono.su', 'post', retry=self.retry)
+                self.get_favorites('kemono.cr', 'post', retry=self.retry)
             except:
-                logger.exception("Unable to get favorite posts from kemono.su")
+                logger.exception("Unable to get favorite posts from kemono.cr")
         if self.c_fav_posts:
             try:
-                self.get_favorites('coomer.su', 'post')
+                self.get_favorites('coomer.st', 'post')
             except:
-                logger.exception("Unable to get favorite posts from coomer.su")
+                logger.exception("Unable to get favorite posts from coomer.st")
         if self.k_fav_users:
             try:
-                self.get_favorites('kemono.su', 'artist', self.k_fav_users)
+                self.get_favorites('kemono.cr', 'artist', self.k_fav_users)
             except:
-                logger.exception("Unable to get favorite users from kemono.su")
+                logger.exception("Unable to get favorite users from kemono.cr")
         if self.c_fav_users:
             try:
-                self.get_favorites('coomer.su', 'artist', self.c_fav_users)
+                self.get_favorites('coomer.st', 'artist', self.c_fav_users)
             except:
-                logger.exception("Unable to get favorite users from coomer.su")
+                logger.exception("Unable to get favorite users from coomer.st")
 
         for url in urls:
             try:
